@@ -8,7 +8,7 @@ module Paypal
         params = {
           :RETURNURL => return_url,
           :CANCELURL => cancel_url
-        }f
+        }
         if options[:no_shipping]
           params[:REQCONFIRMSHIPPING] = 0
           params[:NOSHIPPING] = 1
@@ -170,7 +170,7 @@ module Paypal
           :AMT => Util.formatted_amount(amount),
           :COMPLETETYPE => options[:complete_type] || :Complete
         }
-        params[:CURRENCYCODE]   = options[:currency_code] if options[:currency_code]
+        params[:CURRENCYCODE]   = options[:currency_code] || :USD
         params[:INVNUM]         = options[:invoice_num] if options[:invoice_num]
         params[:NOTE]           = options[:note] if options[:note]
         params[:SOFTDESCRIPTOR] = options[:soft_descriptor] if options[:soft_descriptor]
