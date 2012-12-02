@@ -34,7 +34,10 @@ module Paypal
         :PROTECTIONELIGIBILITY => :protection_eligibility,
         :PROTECTIONELIGIBILITYTYPE => :protection_eligibility_type,
         :ADDRESSOWNER => :address_owner,
-        :ADDRESSSTATUS => :address_status
+        :ADDRESSSTATUS => :address_status,
+        :AUTHORIZATIONID => :authorization_id,
+        :PARENTTRANSACTIONID => :parent_transaction_id,
+        :EXCHANGERATE => :exchange_rate
       }
       attr_accessor *@@attribute_mapping.values
       attr_accessor :shipping_options_is_default, :success_page_redirect_requested, :insurance_option_selected
@@ -57,7 +60,8 @@ module Paypal
           :ship_disc => attrs.delete(:SHIPDISCAMT),
           :shipping => attrs.delete(:SHIPPINGAMT),
           :tax => attrs.delete(:TAXAMT),
-          :fee => attrs.delete(:FEEAMT)
+          :fee => attrs.delete(:FEEAMT),
+          :settle => attrs.delete(:SETTLEAMT)
         )
         @ship_to = Payment::Response::ShipTo.new(
           :owner => attrs.delete(:SHIPADDRESSOWNER),

@@ -8,7 +8,7 @@ module Paypal
         params = {
           :RETURNURL => return_url,
           :CANCELURL => cancel_url
-        }
+        }f
         if options[:no_shipping]
           params[:REQCONFIRMSHIPPING] = 0
           params[:NOSHIPPING] = 1
@@ -35,7 +35,7 @@ module Paypal
       end
 
       def transaction_details(transaction_id)
-        response = self.request :GetTransactionDetails, {:TRANSACTIONID=> transaction_id}
+        response = self.request :GetTransactionDetails, {:TRANSACTIONID => transaction_id}
         Response.new response
       end
 
@@ -159,6 +159,24 @@ module Paypal
           params[:NOTE] = options[:note]
         end
         response = self.request :RefundTransaction, params
+        Response.new response
+      end
+
+      # Capture Specific
+
+      def capture!(authorization_id, amount, options={})
+        params = {
+          :AUTHORIZATIONID => authorization_id,
+          :AMT => Util.formatted_amount(amount),
+          :COMPLETETYPE => options[:complete_type] || :Complete
+        }
+        params[:CURRENCYCODE]   = options[:currency_code] if options[:currency_code]
+        params[:INVNUM]         = options[:invoice_num] if options[:invoice_num]
+        params[:NOTE]           = options[:note] if options[:note]
+        params[:SOFTDESCRIPTOR] = options[:soft_descriptor] if options[:soft_descriptor]
+        params[:MSGSUBID]       = options[:msg_sub_id] if options[:msg_sub_id] 
+        
+        response = self.request :DoCapture, params
         Response.new response
       end
 
